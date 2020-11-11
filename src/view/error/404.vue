@@ -6,7 +6,7 @@
 export default {
   data() {
     return {
-      msg: "not found"
+      msg: "404 not found"
     };
   }
 };

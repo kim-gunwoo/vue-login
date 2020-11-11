@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Login from "../view/Login";
-import NotFound from "../view/NotFound";
+import Login from "../view/login/Login";
+import NotFound from "../view/error/404";
 import Home from "../view/Home";
 
 Vue.use(VueRouter);
@@ -17,18 +17,18 @@ const router = new VueRouter({
     {
       path: "/",
       component: Home,
-      beforeEnter: isAuth,
+      beforeEnter: isAuth
     },
     {
       path: "/login",
-      component: Login,
+      component: Login
       //beforeEnter: isAuth
     },
     {
       path: "*",
-      component: NotFound,
-    },
-  ],
+      component: NotFound
+    }
+  ]
 });
 
 export default router;
