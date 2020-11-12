@@ -23,11 +23,24 @@
         </div>
       </form>
     </div>
+    {{ msg }}
+    {{ user }}
   </div>
 </template>
 
 <script>
-export default {};
+import { mapState } from "vuex";
+
+export default {
+  data() {
+    return { msg: "aefaef;iasf" };
+  },
+  computed: {
+    ...mapState({
+      user: "userStore"
+    })
+  }
+};
 </script>
 
 <style scoped>
