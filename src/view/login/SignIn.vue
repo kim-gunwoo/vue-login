@@ -4,14 +4,24 @@
       <h1>Account Login</h1>
     </div>
     <div class="form-content">
-      <form>
+      <form @submit.prevent="onSubmit">
         <div class="form-group">
           <label for="username">Username</label>
-          <input type="text" required="required" />
+          <input
+            type="email"
+            name="username"
+            required="required"
+            v-model="email"
+          />
         </div>
         <div class="form-group">
           <label for="password">Password</label>
-          <input type="password" required="required" />
+          <input
+            type="password"
+            username="password"
+            required="required"
+            v-model="passwd"
+          />
         </div>
         <div class="form-group">
           <label class="form-remember">
@@ -23,22 +33,42 @@
         </div>
       </form>
     </div>
-    {{ msg }}
-    {{ user }}
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
+const userStore = "userStore";
 
 export default {
   data() {
-    return { msg: "aefaef;iasf" };
+    return {
+      msg: "",
+      email: "",
+      passwd: ""
+    };
   },
   computed: {
     ...mapState({
-      user: "userStore"
+      user: userStore
     })
+  },
+  created() {
+    this.email = this.user.email;
+    this.passwd = this.user.passwd;
+  },
+  methods: {
+    ...mapActions(userStore, ["SIGNIN_USER"]),
+    onSubmit() {
+      this.SIGNIN_USER({ email: this.email, passwd: this.passwd })
+        .then(data => {
+          console.log(data);
+        })
+        .catch(err => {
+          console.log(err);
+          this.error = err.data.error;
+        });
+    }
   }
 };
 </script>
