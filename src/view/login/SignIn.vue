@@ -62,7 +62,8 @@ export default {
     onSubmit() {
       this.SIGNIN_USER({ email: this.email, passwd: this.passwd })
         .then(data => {
-          console.log(data);
+          //console.log(data);
+          this.$router.push("/");
         })
         .catch(err => {
           console.log(err);

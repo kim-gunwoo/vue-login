@@ -19,7 +19,10 @@ const userStore = {
   },
   mutations: {
     SET_USER(state, user) {
-      state.user = user;
+      state = user;
+    },
+    SET_TOKEN(state, user) {
+      state.token = user.token;
     }
   },
   actions: {
@@ -27,14 +30,20 @@ const userStore = {
       const url = "/user/signin";
       const data = { email: email, passwd: passwd };
 
-      axios
+      return axios
         .post(DOMAIN + url, data)
         .then(res => {
-          console.log("success");
-          console.log(res);
+          if (res.data) {
+            const user = { email: email, passwd: passwd, token: "sign" };
+            if (res.data) {
+              commit("SET_TOKEN", user);
+              return { msg: "success", path: "/" };
+            }
+          }
+          //return res.data;
         })
         .catch(err => {
-          console.log(err);
+          return err;
         });
     }
   }
