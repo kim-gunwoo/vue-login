@@ -3,6 +3,7 @@
     <div class="form-header">
       <h1>Account Login</h1>
     </div>
+
     <div class="form-content">
       <form @submit.prevent="onSubmit">
         <div class="form-group">
@@ -33,6 +34,7 @@
         </div>
       </form>
     </div>
+    <h2>{{ msg }}</h2>
   </div>
 </template>
 
@@ -60,15 +62,15 @@ export default {
   methods: {
     ...mapActions(userStore, ["SIGNIN_USER"]),
     onSubmit() {
-      this.SIGNIN_USER({ email: this.email, passwd: this.passwd })
-        .then(data => {
-          //console.log(data);
+      this.SIGNIN_USER({ email: this.email, passwd: this.passwd }).then(
+        data => {
+          if (data.err) {
+            this.msg = data.err;
+            return;
+          }
           this.$router.push("/");
-        })
-        .catch(err => {
-          console.log(err);
-          this.error = err.data.error;
-        });
+        }
+      );
     }
   }
 };

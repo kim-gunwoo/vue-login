@@ -7,30 +7,101 @@
       <form>
         <div class="form-group">
           <label for="username">Username</label>
-          <input type="text" required="required" />
-        </div>
-        <div class="form-group">
-          <label for="password">Password</label>
-          <input type="password" required="required" />
-        </div>
-        <div class="form-group">
-          <label for="cpassword">Confirm Password</label>
-          <input type="password" required="required" />
+          <input
+            type="text"
+            v-model="usernm"
+            ref="usernm"
+            required="required"
+          />
         </div>
         <div class="form-group">
           <label for="email">Email Address</label>
-          <input type="email" required="required" />
+          <input type="email" v-model="email" ref="email" required="required" />
         </div>
         <div class="form-group">
-          <button type="submit">Register</button>
+          <label for="password">Password</label>
+          <input
+            type="password"
+            v-model="passwd"
+            ref="passwd"
+            required="required"
+          />
+        </div>
+        <div class="form-group">
+          <label for="cpassword">Confirm Password</label>
+          <input
+            type="password"
+            v-model="cpasswd"
+            ref="cpasswd"
+            required="required"
+          />
+        </div>
+
+        <div class="form-group">
+          <button type="submit" v-on:click.prevent="onSubmit">Register</button>
         </div>
       </form>
     </div>
+    <h2>{{ msg }}</h2>
   </div>
 </template>
 
 <script>
-export default {};
+import { mapState, mapActions } from "vuex";
+const userStore = "userStore";
+export default {
+  data() {
+    return {
+      msg: "",
+      email: "",
+      usernm: "",
+      passwd: "",
+      cpasswd: ""
+    };
+  },
+  computed: {
+    ...mapState({
+      user: userStore
+    })
+  },
+  created() {
+    this.email = this.user.email;
+    this.passwd = this.user.passwd;
+    this.cpasswd = this.user.passwd;
+    this.usernm = this.user.usernm;
+  },
+  methods: {
+    ...mapActions(userStore, ["SIGNUP_USER"]),
+    onSubmit() {
+      if (!(this.usernm && this.email && this.passwd && this.cpasswd)) {
+        this.msg = `reauired`;
+        return;
+      }
+
+      if (this.passwd !== this.cpasswd) {
+        alert(`password `);
+        this.$refs.passwd.focus();
+        return;
+      }
+
+      const user = {
+        email: this.email,
+        usernm: this.usernm,
+        passwd: this.passwd
+      };
+
+      this.SIGNUP_USER(user).then(data => {
+        if (data.err) {
+          this.msg = data.err.response.data.error;
+          return;
+        }
+        if (data.success) {
+          this.$router.push("/");
+        }
+      });
+    }
+  }
+};
 </script>
 
 <style scoped>

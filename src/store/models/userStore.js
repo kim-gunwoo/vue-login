@@ -5,14 +5,11 @@ const userStore = {
   namespaced: true,
   state: {
     email: "test@test",
+    usernm: "test",
     passwd: "test",
-    name: null,
     token: null
   },
   getters: {
-    user: state => {
-      return state.user;
-    },
     isAuth(state) {
       return !!state.token;
     }
@@ -27,11 +24,12 @@ const userStore = {
   },
   actions: {
     SIGNIN_USER({ commit }, { email, passwd }) {
-      const url = "/user/signin";
+      //const url = "/user/signin";
+      const url = "/user";
       const data = { email: email, passwd: passwd };
 
       return axios
-        .post(DOMAIN + url, data)
+        .get(DOMAIN + url, data)
         .then(res => {
           if (res.data) {
             const user = { email: email, passwd: passwd, token: "sign" };
@@ -40,10 +38,24 @@ const userStore = {
               return { msg: "success", path: "/" };
             }
           }
-          //return res.data;
         })
         .catch(err => {
-          return err;
+          return { err };
+        });
+    },
+    SIGNUP_USER({ commit }, user) {
+      //const url = "/user/signup";
+      const url = "/user";
+
+      return axios
+        .post(DOMAIN + url, user)
+        .then(res => {
+          if (res.data) {
+            return { msg: "success", path: "/" };
+          }
+        })
+        .catch(err => {
+          return { err };
         });
     }
   }
